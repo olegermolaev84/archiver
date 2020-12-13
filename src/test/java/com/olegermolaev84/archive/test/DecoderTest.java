@@ -39,7 +39,14 @@ public class DecoderTest {
 		try(FileOutputStream fos = new FileOutputStream(ARCHIVE_FILE_NAME)) {
 			new Coder(FILES_NAMES_TO_PACK, fos)
 			.pack();
-		}		
+		}	
+		
+		if(!Files.exists(Paths.get("./test/archives"))) {
+			Files.createDirectory(Paths.get("./test/archives"));
+		}
+		if(!Files.exists(Paths.get("./test/output"))) {
+			Files.createDirectory(Paths.get("./test/output"));
+		}
 	}
 	
 	@AfterAll
@@ -61,24 +68,17 @@ public class DecoderTest {
 	}
 	
 	@Test
-	public void exceptionOnSettingParrentPathWithoutWritePermissions() throws IOException  {
-		try (FileInputStream is = new FileInputStream(ARCHIVE_FILE_NAME)) {
-			new Decoder(is).setParentPath(Paths.get("./test/source/immutable"));
-			fail("Exception is not thrown");
-		}
-		catch(IllegalArgumentException e){
-			assertEquals("Path: .\\test\\source\\immutable does not have write permissions", e.getMessage());
-		}
-	}
-	
-	@Test
 	public void exceptionOnSettingFileInsteadOfDirectoryAsParrentPath() throws IOException  {
 		try (FileInputStream is = new FileInputStream(ARCHIVE_FILE_NAME)){
 			new Decoder(is).setParentPath(Paths.get("./test/source/file.txt"));
 			fail("Exception is not thrown");
 		}
 		catch(IllegalArgumentException e){
-			assertEquals("Path: .\\test\\source\\file.txt is not directory", e.getMessage());
+			if(System.getProperty("os.name").contains("Windows")) {
+				assertEquals("Path: .\\test\\source\\file.txt is not directory", e.getMessage());
+			}else {
+				assertEquals("Path: ./test/source/file.txt is not directory", e.getMessage());
+			}
 		}
 	}
 	
@@ -152,7 +152,11 @@ public class DecoderTest {
 		Decoder decoder = new Decoder(is);
 		decoder.setParentPath(PARRENT_PATH);
 		boolean result = decoder.unpack();
-		assertEquals("File: test\\output\\test\\source\\file.txt already exists\n", decoder.getErrorMessage());
+		if(System.getProperty("os.name").contains("Windows")) {
+			assertEquals("File: test\\output\\test\\source\\file.txt already exists\n", decoder.getErrorMessage());
+		}else {
+			assertEquals("File: test/output/test/source/file.txt already exists\n", decoder.getErrorMessage());
+		}
 		assertEquals(false, result);
 		
 		is.close();

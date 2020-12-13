@@ -53,7 +53,12 @@ public class SingleFileCoderTest {
 		PathHeader header = coder.getPathHeader();
 		assertEquals(header.isRegularFile(), true);
 		assertEquals(header.getSizeOfData(), 0);
-		assertEquals(header.getPathName(), "test\\source\\files\\empty.txt");
+		if(System.getProperty("os.name").contains("Windows")) {
+			assertEquals(header.getPathName(), "test\\source\\files\\empty.txt");
+		}
+		else {
+			assertEquals(header.getPathName(), "test/source/files/empty.txt");
+		}
 	}
 	
 	@Test
@@ -63,7 +68,12 @@ public class SingleFileCoderTest {
 		PathHeader header = coder.getPathHeader();
 		assertEquals(header.isRegularFile(), false);
 		assertEquals(header.getSizeOfData(), 0);
-		assertEquals(header.getPathName(), "test\\source\\files");
+		if(System.getProperty("os.name").contains("Windows")) {
+			assertEquals(header.getPathName(), "test\\source\\files");
+		}
+		else {
+			assertEquals(header.getPathName(), "test/source/files");
+		}
 	}
 	
 	@Test
@@ -73,6 +83,10 @@ public class SingleFileCoderTest {
 		PathHeader header = coder.getPathHeader();
 		assertEquals(header.isRegularFile(), true);
 		assertEquals(header.getSizeOfData()>0, true);
-		assertEquals(header.getPathName(), "test\\source\\file.txt");
+		if(System.getProperty("os.name").contains("Windows")) {
+			assertEquals(header.getPathName(), "test\\source\\file.txt");
+		}else {
+			assertEquals(header.getPathName(), "test/source/file.txt");
+		}
 	}
 }

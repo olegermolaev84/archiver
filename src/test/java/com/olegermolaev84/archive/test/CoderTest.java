@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.olegermolaev84.archive.core.Coder;
@@ -19,6 +20,13 @@ public class CoderTest {
 	private static final String[] FILES_NAMES_TO_PACK = {"./test/source/files", 
 			"./test/source/file.txt", 
 			"./test/source/images"};
+	
+	@BeforeAll
+	public static void createNeccessaryDurectories() throws IOException {
+		if(!Files.exists(Paths.get("./test/archives"))) {
+			Files.createDirectory(Paths.get("./test/archives"));
+		}
+	}
 	
 	@Test
 	public void exceptionOnCompressionLevelMoreThen9() throws IOException {
@@ -52,17 +60,6 @@ public class CoderTest {
 			assertEquals(false, result);
 			assertEquals(coder.getErrorMessage(), "File: not_existent_file does not exist\n"+
 					"File: not_existent_file2 does not exist\n");
-		}
-	}
-	
-	@Test
-	public void tryToEncodeFileWithoutReadPermissions() throws IOException {
-		try(FileOutputStream fos = new FileOutputStream(ARCHIVE_FILE_NAME)) {
-			Coder coder = new Coder(new String[] {"./test/source/errors"}, fos);
-			boolean result = coder.pack();
-			assertEquals(false, result);
-			assertEquals(coder.getErrorMessage(), 
-					"File: .\\test\\source\\errors\\without_read_access.txt.txt does not have read permissions\n");
 		}
 	}
 	
