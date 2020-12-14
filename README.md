@@ -23,3 +23,7 @@
 
 1. Сделайте jar файл исполняемым  
 *chmod u+x /usr/bin/archiver  
+
+1. Удалите папку с проектом  
+*cd ~
+*rm -R archiver
