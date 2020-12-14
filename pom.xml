@@ -38,16 +38,16 @@
           <artifactId>maven-assembly-plugin</artifactId>
           <version>3.2.0</version>
           <configuration>
-            <appendAssemblyId>false</appendAssemblyId> <!-- nicer looking jar name -->
             <archive>
               <manifest>
-                <addClasspath>true</addClasspath>
-                <mainClass>com.olegermolaev84.archiver.main.Archiver</mainClass>
+                <mainClass>com.olegermolaev84.archive.main.Archiver</mainClass>
               </manifest>
             </archive>
             <descriptorRefs>
-              <descriptorRef>jar-with-dependencies</descriptorRef>
+            	<descriptorRef>jar-with-dependencies</descriptorRef>
             </descriptorRefs>
+            <finalName>${project.artifactId}</finalName>
+            <appendAssemblyId>false</appendAssemblyId> 
           </configuration>
 
           <executions>
