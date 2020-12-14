@@ -3,6 +3,7 @@
   <groupId>com.olegermolaev84</groupId>
   <artifactId>archiver</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,6 +33,32 @@
                     <version>5.7.0</version>
                 </dependency>
             </dependencies>
+        </plugin>
+       <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <appendAssemblyId>false</appendAssemblyId> <!-- nicer looking jar name -->
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <mainClass>com.olegermolaev84.archiver.main.Archiver</mainClass>
+              </manifest>
+            </archive>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+          </configuration>
+
+          <executions>
+            <execution>
+              <id>make-assembly</id> 
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
     </plugins>
   </build>
